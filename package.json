@@ -1,0 +1,30 @@
+{
+  "name": "ha-mcp-bridge",
+  "version": "2.0.0",
+  "description": "Multi-tenant Home Assistant MCP Bridge for Claude",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "health": "node -e \"fetch('http://localhost:3001/health').then(r=>console.log('Health check passed')).catch(e=>console.error('Health check failed'))\""
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "keywords": [
+    "home-assistant",
+    "mcp",
+    "claude",
+    "smart-home",
+    "multi-tenant"
+  ],
+  "author": "shaike1",
+  "license": "MIT"
+}
