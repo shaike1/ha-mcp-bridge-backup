@@ -1,0 +1,82 @@
+version: '3.8'
+
+services:
+  ha-mcp-bridge:
+    image: node:18-alpine
+    restart: unless-stopped
+    container_name: ha-mcp-bridge
+    working_dir: /app
+    entrypoint: ["/bin/sh", "-c"]
+    command: |
+      "apk add --no-cache wget &&
+       echo 'Setting up HA MCP Bridge...' &&
+       if [ ! -f package.json ]; then
+         cat > package.json << 'EOF'
+      {
+        \"name\": \"ha-mcp-bridge\",
+        \"version\": \"2.0.0\",
+        \"main\": \"server.js\",
+        \"scripts\": {
+          \"start\": \"node server.js\"
+        },
+        \"dependencies\": {
+          \"express\": \"^4.18.2\",
+          \"dotenv\": \"^16.3.1\"
+        }
+      }
+      EOF
+       fi &&
+       npm install --omit=dev &&
+       mkdir -p data public scripts &&
+       echo 'Starting HA MCP Bridge...' &&
+       node server.js"
+    
+    volumes:
+      - ./ha-mcp:/app
+      - mcp_data:/app/data
+    
+    environment:
+      - PORT=3001
+      - NODE_ENV=production
+      - SERVER_URL=https://ha-mcp.right-api.com
+      - MULTI_TENANT=true
+      - ENABLE_USER_REGISTRATION=true
+      - ADMIN_API_KEY=your_admin_key_here
+      - MCP_API_KEY=c5d4265e8319384af9f8e0e3ca503b07da4cf360b7a84acaafe326a249c92c21
+      - LOG_LEVEL=info
+      - DEBUG=false
+    
+    networks:
+      - traefik-network
+    
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.ha-mcp-bridge.rule=Host(`ha-mcp.right-api.com`)"
+      - "traefik.http.routers.ha-mcp-bridge.entrypoints=websecure"
+      - "traefik.http.routers.ha-mcp-bridge.tls=true"
+      - "traefik.http.routers.ha-mcp-bridge.tls.certresolver=mytlschallenge"
+      - "traefik.http.services.ha-mcp-bridge.loadbalancer.server.port=3001"
+      - "traefik.http.services.ha-mcp-bridge.loadbalancer.healthcheck.path=/health"
+      - "traefik.http.services.ha-mcp-bridge.loadbalancer.healthcheck.interval=30s"
+      - "traefik.http.routers.ha-mcp-bridge.middlewares=security-headers"
+      
+      # CORS Headers for MCP
+      - "traefik.http.middlewares.security-headers.headers.accesscontrolallowmethods=GET,POST,OPTIONS"
+      - "traefik.http.middlewares.security-headers.headers.accesscontrolalloworiginlist=*"
+      - "traefik.http.middlewares.security-headers.headers.accesscontrolallowheaders=Content-Type,Authorization,X-API-Key"
+      - "traefik.http.middlewares.security-headers.headers.accesscontrolmaxage=86400"
+
+networks:
+  traefik-network:
+    external: true
+
+volumes:
+  mcp_data:
+    driver: local
