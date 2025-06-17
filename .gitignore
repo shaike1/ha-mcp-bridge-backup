@@ -1,0 +1,74 @@
+# Environment variables - NEVER COMMIT THESE!
+.env
+.env.*
+!.env.example
+
+# API Keys and secrets
+*.key
+*.pem
+config.json
+secrets.json
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# Data directory with user information
+data/
+*.db
+*.sqlite
+
+# Logs
+logs/
+*.log
+log/
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory
+coverage/
+*.lcov
+.nyc_output
+
+# ESLint cache
+.eslintcache
+
+# IDEs and editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Docker
+.dockerignore
+
+# Temporary files
+tmp/
+temp/
+
+# Backup files
+*.bak
+*.backup
+
+# Any files containing sensitive data
+*secrets*
+*keys*
+*tokens*
