@@ -46,7 +46,7 @@ Add this to your Claude Desktop configuration:
 
 1. **Clone the repository:**
 ```bash
-git clone https://github.com/shaike1/ha-mcp-bridge-backup.git
+git clone https://github.com/shaike1/ha-mcp-bridge.git
 cd ha-mcp-bridge-backup
 ```
 
