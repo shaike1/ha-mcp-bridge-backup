@@ -38,11 +38,11 @@ services:
     environment:
       - PORT=3001
       - NODE_ENV=production
-      - SERVER_URL=https://ha-mcp.right-api.com
+      - SERVER_URL=https://your-domain.com
       - MULTI_TENANT=true
       - ENABLE_USER_REGISTRATION=true
-      - ADMIN_API_KEY=your_admin_key_here
-      - MCP_API_KEY=c5d4265e8319384af9f8e0e3ca503b07da4cf360b7a84acaafe326a249c92c21
+      - ADMIN_API_KEY=${ADMIN_API_KEY}
+      - MCP_API_KEY=${MCP_API_KEY}
       - LOG_LEVEL=info
       - DEBUG=false
     
@@ -58,7 +58,7 @@ services:
     
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.ha-mcp-bridge.rule=Host(`ha-mcp.right-api.com`)"
+      - "traefik.http.routers.ha-mcp-bridge.rule=Host(`your-domain.com`)"
       - "traefik.http.routers.ha-mcp-bridge.entrypoints=websecure"
       - "traefik.http.routers.ha-mcp-bridge.tls=true"
       - "traefik.http.routers.ha-mcp-bridge.tls.certresolver=mytlschallenge"
