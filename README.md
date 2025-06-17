@@ -15,7 +15,7 @@
 ### 1. Register Your Home Assistant
 
 ```bash
-curl -X POST https://ha-mcp.right-api.com/register \
+curl -X POST https://your-domain.com/register \
   -H "Content-Type: application/json" \
   -d '{
     "email": "your@email.com",
@@ -33,7 +33,7 @@ Add this to your Claude Desktop configuration:
   "mcpServers": {
     "homeassistant": {
       "command": "npx",
-      "args": ["mcp-remote", "https://ha-mcp.right-api.com"],
+      "args": ["mcp-remote", "https://your-domain.com"],
       "env": {
         "MCP_API_KEY": "your_generated_api_key_here"
       }
@@ -44,6 +44,19 @@ Add this to your Claude Desktop configuration:
 
 ## 🐳 Docker Deployment
 
+1. **Clone the repository:**
+```bash
+git clone https://github.com/shaike1/ha-mcp-bridge-backup.git
+cd ha-mcp-bridge-backup
+```
+
+2. **Configure environment:**
+```bash
+cp .env.example .env
+# Edit .env with your settings
+```
+
+3. **Deploy:**
 ```bash
 docker-compose up -d
 ```
@@ -86,6 +99,13 @@ Once configured, ask Claude:
 - "Show me all my lights"
 - "Turn on the living room lights"
 - "What's the status of my Home Assistant?"
+
+## 🔐 Security Notes
+
+- Never commit API keys or passwords to the repository
+- Use environment variables for all sensitive configuration
+- Generate strong API keys: `openssl rand -hex 32`
+- Keep your `.env` file secure and never share it
 
 ## 🤝 Contributing
 
